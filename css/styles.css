@@ -1,0 +1,45 @@
+:root {
+    --blue: #0c3fad;
+    --red: #de261c;
+    --black: #000;
+    --white: #fff;
+    --yellow: #ffea3d;
+    --grey: #b1b1b1;
+    --title: Anta, sans-serif;
+    --body: "Tilt Neon", sans-serif;
+    --text: 24px;
+    --textSm: 16px;
+    --textMd: 22px;
+    --textLg: 48px;
+    --h1: 80px;
+    --h3: 50px;
+    --standard-margin: 20px;
+    --standard-padding: 10px; }
+
+* {
+    box-sizing: border-box;}
+    
+html {
+    overflow-x: hidden;
+    margin-right: calc(100% - 100vw); }
+
+header {
+    background-image: url(../img/rainbowbg_freeepik.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    margin-top: 0;
+    padding-top: 0;
+    height: 30vh;
+    width: 100%; }
+
+h3 {
+    color: var(--white);
+    text-align: center;
+    font-size: var(--h3); }    
+
+h4 {
+    color: var(--grey);
+    text-align: center; 
+    text-shadow: 0px .5px 1px var(--white); }
