@@ -12,7 +12,7 @@
     "url": "git+https://github.com/McDuf/CF---movie_api.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "McDuf",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -23,6 +23,7 @@
     "body-parser": "^1.20.3",
     "express": "^4.21.2",
     "lodash": "^4.17.21",
+    "method-override": "^3.0.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

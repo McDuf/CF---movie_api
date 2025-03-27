@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan'),
 fs = require('fs'),
 path = require('path');
-const accessLogStream=fs.createWriteStream(path.join(__dirname,'log.txt'), {flags: 'a'});
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'/log.txt'), {flags: 'a'});
 const bodyParser = require('body-parser'),
 methodOverride = require('method-override');
 
@@ -91,24 +91,38 @@ let timeStamp = (req, res, next) => {
 app.use(myLogger);
 app.use(timeStamp);
 app.use(express.static('public'));
-app.use(morgan('common', {stream: accessLogStream}));
+app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
 //GET Requests
-app.get('/documentation', (req, res, next))
+app.get('/documentation', (req, res, next) => {
+    res.sendFile('public/documentation.html', { root: __dirname}); });
+
 app.get('/movies', (req, res, next) => {
     res.json(myTopMovies); });
+
+//Default route (homepage)
 app.get('/', (req, res, next) => {
     res.send('Does this answer your question?'); });
 
 //Error Handling
-app.use((err, req, res, next) => {
+app.get('/log.txt', (req, res) => {
+    throw new Error('This is a Test Error, it is only a test');
+});
+
+app.use((err, req, res) => {
     console.error(err.stack);
-    res.status(500).send('Uh-oh, you done it now'); });
+    res.status(500).send('Uh-oh, you done it now');
+    console.error(`[${new Date().toISOString()}] Error occurred: `);
+    console.error(`Method: ${req.method}, URL: ${req.originalUrl}`);
+    console.error(`Error: ${err.message}`);
+    console.error(`Stack: ${err.stack}`); });
 
 //Listener for Requests
-app.listen(8080, () => {
-    console.log('Always Listening....');
+const hostname  = '127.0.0.1';
+const port = 8080;
+app.listen(PORT, hostname, () => {
+    console.log(`Always Listening.... on port ${PORT}`);
 });
