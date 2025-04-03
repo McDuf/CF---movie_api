@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script> 
     <title>myFlix API Documentation</title>
 </head>
 <body>
@@ -11,6 +13,37 @@
 <p>A server-side component of a 'movies' web application. My Flix will provide users with access to information about different movies, directors, and genres. Users will be able tosign up, update their personal information, and create a list of their favorite movies.</p>
 <p>Endpoints and usage instructions will be added as the project 
     develops.</p>
+
+<table class="table table-striped table-bordered"><tbody><tr><th>A high-level description of what kind of data the endpoint returns</th><th>The endpoint URL</th><th>Response</th><th>The method type</th><th>The format of the response data</th><th>The format of data expected in the body of the request</th><th>(and an example)</th></tr><tr><td>Business Logic</td><td>undefined</td><td>res</td><td>HTTP Method</td><td>Request Body Data Format</td><td>Response Body Data Format</td></tr><tr><td>Return a list of ALL movies to the user;</td><td>/movies</td><td>undefined</td><td>GET</td><td>None</td><td>A JSON object holding data about all the movies</td><td>N/A</td></tr><tr><td>Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;</td><td>/movies/[Title]</td><td>undefined</td><td>GET</td><td>None</td><td>A JSON object holding data about a single movie by title, containing description, genre, director, image URL, and feature status</td><td>N/A</td></tr><tr><td>Return data about a genre (description) by name/title (e.g., “Thriller”);</td><td>/movies/genre/[genreName]</td><td>undefined</td><td>GET</td><td>None</td><td>A JSON object holding data about genres</td><td>N/A</td></tr><tr><td>Return data about a director (bio, birth year, death year) by name;</td><td>/movies/directors/[directorName]</td><td>undefined</td><td>GET</td><td>None</td><td>A JSON object holding data about directors</td><td>N/A</td></tr><tr><td>Return data about a writer (description);</td><td>/movies/writers/[writorName]</td><td>undefined</td><td>GET</td><td>None</td><td>A JSON object holding data about writers</td><td>N/A</td></tr><tr><td>Allow new users to register;</td><td>/users</td><td>undefined</td><td>POST</td><td>A JSON object holding data about the user to add, structured like: {
+        userName: 'Admin',
+        name: 'McDuf',
+        id: 1,
+        viewedTitles: ['But, I\'m a Cheerleader', 'D.E.B.S.'],
+        watchTitles: ['Basic Instinct'],
+        favoriteTitles: ['But, I\'m a Cheerleader', 'D.E.B.S.'] 
+}</td><td>A JSON object holding data about a user, containing a username, name, and id properties.</td><td>{
+        userName: 'Admin',
+        name: 'McDuf',
+        id: 1,
+        viewedTitles: ['But, I\'m a Cheerleader', 'D.E.B.S.'],
+        watchTitles: ['Basic Instinct'],
+        favoriteTitles: ['But, I\'m a Cheerleader', 'D.E.B.S.'] 
+}</td></tr><tr><td>Allow users to update their user info</td><td>/users/[id]/update/[name]</td><td>undefined</td><td>PUT</td><td>None</td><td>A text message indicating the user info that was updated</td><td>N/A</td></tr><tr><td>Allow users to add a movie to their favorites list (showing only a text that a movie has been added—more on this later);</td><td>/users/[id]/favoriteTitles/[movieTitle]</td><td>undefined</td><td>POST</td><td>None</td><td>A text message indicating the addition</td><td>N/A</td></tr><tr><td>Allow users to add a movie to their viewed list</td><td>/users/[id]/viewedTitles/[movieTitle]</td><td>undefined</td><td>POST</td><td>None</td><td>A text message indicating the addition</td><td>N/A</td></tr><tr><td>Allow users to add a movie to their watch list</td><td>/users/[id]/watchTitles/[movieTitle]</td><td>undefined</td><td>POST</td><td>None</td><td>A text message indicating the addition</td><td>N/A</td></tr><tr><td>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed—more on this later);</td><td>/users/[id]/favoriteTitles/[movieTitle]</td><td>undefined</td><td>DELETE</td><td>None</td><td>A text message indicating removal</td><td>N/A</td></tr><tr><td>Allow users to remove a movie from their viewed list</td><td>/users/[id]/viewedTitles/[movieTitle]</td><td>undefined</td><td>DELETE</td><td>None</td><td>A text message indicating removal</td><td>N/A</td></tr><tr><td>Allow users to remove a movie from their watch list</td><td>/users/[id]/watchTitles/[movieTitle]</td><td>undefined</td><td>DELETE</td><td>None</td><td>A text message indicating removal</td><td>N/A</td></tr><tr><td>Allow existing users to deregister (showing only a text that a user email has been removed—more on this later).</td><td>/users/[id]</td><td>undefined</td><td>DELETE</td><td>None</td><td>A text message indicating removal</td><td>N/A</td></tr><tr><td>Return documentation file</td><td>/documentation</td><td>undefined</td><td>GET</td><td>none</td><td>documentation.html file</td><td>N/A</td></tr><tr><td>Add movie to list</td><td>/movies</td><td>undefined</td><td>POST</td><td>A JSON object holding data about the movie structured like this : 
+    {   title: 'But, I\'m a Cheerleader',
+    cast: ['Natasha Lyonne', 'Clea DuVall', 'Melanie Lynskey', 'RuPaul Charles' ],
+     year: 1999,
+     writer: 'Brian Wayne Peterson',
+     genre: ['Comedy', 'Drama', 'Romance'],
+     director: 'Jamie Babbit',
+  story: 'A naive teenager is sent to rehab camp when her straitlaced parents and friends suspect her of being a lesbian.' }</td><td>A JSON object holding data about a title, containing title, cast, year, writer, genre, director, and story properties.</td><td>{   title: 'But, I\'m a Cheerleader',
+    cast: ['Natasha Lyonne', 'Clea DuVall', 'Melanie Lynskey', 'RuPaul Charles'],
+     year: 1999,
+     writer: 'Brian Wayne Peterson',
+     genre: ['Comedy', 'Drama', 'Romance'],
+     director: 'Jamie Babbit',
+  story: 'A naive teenager is sent to rehab camp when her straitlaced parents and friends suspect her of being a lesbian.' }</td></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr></tbody></table>
 </body>
 </html>
-//Possibly: A server-side component of a 'movies' web application. My LesFic Reads will provide users with access to information about different books, authors, and fiction genres in lesbian books. Users will be able tosign up, update their personal information, and create a list of their favorite books.//
+
+
+<!-- Possibly: A server-side component of a 'movies' web application. My LesFic Reads will provide users with access to information about different books, authors, and fiction genres in lesbian books. Users will be able tosign up, update their personal information, and create a list of their favorite books.// -->
