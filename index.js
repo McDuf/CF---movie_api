@@ -1,21 +1,26 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
-const Models = require('./js/models.js');
-const accessLogStream = fs.createWriteStream(path.join(__dirname,'/log.txt'), {flags: 'a'});
-const bodyParser = require('body-parser'),
-methodOverride = require('method-override');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/cfDB');
-app.use(mongoose.NewUrlParser);
-app.use(mongoose.UnifiedTopology);
 
+const Models = require('./js/models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'/log.txt'),{flags: 'a'});
+app.use(myLogger);
+app.use(timeStamp);
+
+app.use(express.static('public'));
+app.use(morgan('combined', {stream: accessLogStream}));
 
 //static logging
 let myLogger = ('/log.txt', (req, res, next) => {
@@ -26,22 +31,9 @@ let timeStamp = ('/log.txt', (req, res, next) => {
     req.timeStamp = Date.now();
     next(); });
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-
-app.use(myLogger);
-app.use(timeStamp);
-app.use('/static', express.static(path.join(__dirname, 'public')));
-app.use(express.static('public'));
-app.use(morgan('combined', {stream: accessLogStream}));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(methodOverride());
-
-
 //Default route (homepage)
 app.get('/', (req, res) => {
-    res.send('Welcome to my DB'); });
+    res.send(`Welcome to my DB`); });
 
 //User Options
 //Create New User
@@ -197,6 +189,7 @@ app.delete('/users/:Username/favoriteTitles/:MovieID', async (req, res) => {
   });
 
 //GET Requests
+
 //Gets the documentation file
 app.get('/documentation.html', (req, res) => {
     res.sendFile('public/documentation.html', { root: __dirname}); });
@@ -295,6 +288,6 @@ app.use((err, req, res) => {
     console.error(`Stack: ${err.stack}`); });
 
 //Listener for Requests
-app.listen(5500, () => {
-    console.log('Your app is listening on port 8080.');
+app.listen(3000, () => {
+    console.log('Your app is listening on port 3000.');
 });
