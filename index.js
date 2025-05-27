@@ -9,7 +9,7 @@ const path = require('path');
 const uuid = require('uuid');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/cfDB');
+mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const Models = require('./js/models.js');
 const Movies = Models.Movie;
@@ -160,7 +160,7 @@ app.delete('/users/:Username/favoriteTitles/:MovieID', async (req, res) => {
      });
  });
  
- app.delete('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
+app.delete('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
      await Users.findOneAndUpdate({ Username: req.params.Username }, {
      $pull: { viewedTitles: req.params.MovieID}
      },
@@ -174,7 +174,7 @@ app.delete('/users/:Username/favoriteTitles/:MovieID', async (req, res) => {
       });
   });
  
-  app.delete('/users/:Username/watchTitles/:MovieID', async (req, res) => {
+app.delete('/users/:Username/watchTitles/:MovieID', async (req, res) => {
      await Users.findOneAndUpdate({ Username: req.params.Username }, {
      $pull: { watchTitles: req.params.MovieID}
      },
@@ -205,7 +205,6 @@ app.get('/movies', async (req, res) => {
         res.status(500).send('Error: ' + error);
     });
 });
-   
 //Gets the data about a single movie
 app.get('/movies/:movieTitle', async (req, res) => {
     await Movies.findOne({ movieTitle: req.params.movieTitle})
@@ -221,47 +220,53 @@ app.get('/movies/:movieTitle', async (req, res) => {
     res.status(500).send('Error: ' + error);
     });
 });
-///////////
-app.get('/movies/genre/:genreName', (req, res) => {
-    const genreName = req.params.genre;
-    const genre = movies
-    .map(movie => movie.genre)
-    .find(genre => genre.name === genreName);
-
-    if (genre) {
-        res.status(200).json(genre);
+//1
+app.get('/movies/genre/:genreName', async (req, res) => {
+    await Genre.findone({ genreName: req.params.genreName})
+    .then((genre) => {
+        if (genre) {
+            res.status(200).json(genre);
     } else {
         res.status(400).send('Does not exist, do you?');
     }
+})
+.catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+    });
 });
 
-app.get('/movies/directors/:directorName', (req, res) => {
-    const directorName = req.params.director;
-    const director = movies
-    .map(movie => movie.director)
-    .find(director => director.name === directorName);
-
+app.get('/movies/directors/:directorName', async (req, res) => {
+   await Director.findone({ directorName: req.params.directorName})
+   .then((director) => {
     if (director) {
         res.status(200).json(director);
     } else {
         res.status(400).send('Does not exist, do they direct <mark> friendly </mark> movies?');
     }
+})
+.catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+    });
 });
 
-app.get('/movies/writers/:writerName', (req, res) => {
-    const writerName = req.params.writer;
-    const writer = movies
-    .map(movie => movie.writer)
-    .find(writer => writer.name === writerName);
-
+app.get('/movies/writers/:writerName', async (req, res) => {
+    await writer.findone({ writerName: req.params.writerName})
+    .then((writer) => {
     if (writer) {
         res.status(200).json(writer);
     } else {
         res.status(400).send('Does not exist, do they write <mark>friendly</mark> movies?');
     }
+})
+.catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+    });
 });
 
-//Adds a new movie to list of titles
+/*//Adds a new movie to list of titles
 app.post('/movies', (req, res) => {
     let newMovie = req.body
 
@@ -272,7 +277,7 @@ app.post('/movies', (req, res) => {
         movies.push(newMovie);
         res.status(201).send(newMovie);
     }
-});
+});/*/
 
 //Error Handling
 app.get('/log.txt', (req, res) => {
