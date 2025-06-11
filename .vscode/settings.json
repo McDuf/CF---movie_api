@@ -1,3 +1,0 @@
-{
-    "fastapi-endpoint.files.include": "**/*.py"
-}

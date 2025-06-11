@@ -1,26 +1,36 @@
-const express = require('express');
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+const express = require('express'),
+    morgan = require('morgan'),
+    fs = require('fs'), //import built-in module fs
+    path = require('path'); //import builit in module path
 
-const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
+const app = express();
+// create a write stream (in append mode)
+// a ‘log.txt’ file is created in root directory
+const accessLogStream = fs.createWriteStream(path.join('C:\Users\"Hannah Irey"\Desktop\CareerFoundry\FullStackImmersion\Achievement_2-ServerSideProgramming_NodeJS\movie_api','./log.txt'),{flags: 'a'});
+
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}));
+
+const bodyParser = require('body-parser'),
+  methodOverride = require('method-override');
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+
 const uuid = require('uuid');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-const Models = require('./js/models.js');
+const path = require('path');
+app.use('/', express.static(path.join('C:\Users\"Hannah Irey"\Desktop\CareerFoundry\FullStackImmersion\Achievement_2-ServerSideProgramming_NodeJS\movie_api\public','public')));
+app.use('/movies', express.static('movies'));
+app.use('/users', express.static('users'));
+
+const Models = require('../js/models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
-
-const accessLogStream = fs.createWriteStream(path.join(__dirname,'/log.txt'),{flags: 'a'});
-app.use(myLogger);
-app.use(timeStamp);
-
-app.use(express.static('public'));
-app.use(morgan('combined', {stream: accessLogStream}));
 
 //static logging
 let myLogger = ('/log.txt', (req, res, next) => {
@@ -32,8 +42,22 @@ let timeStamp = ('/log.txt', (req, res, next) => {
     next(); });
 
 //Default route (homepage)
+
 app.get('/', (req, res) => {
-    res.send(`Welcome to my DB`); });
+    res.sendFile('/index.html');
+});
+
+app.get('/documentation', (req, res) => {                  
+  res.sendFile('/documentation.html');
+});
+
+app.get('/movies', (req, res) => {
+  res.json(Movies);
+});
+
+app.get('/users', (req, res) => {
+  res.json(Users);
+});
 
 //User Options
 //Create New User
@@ -129,7 +153,7 @@ app.post('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
      console.error(error);
      res.status(500).send('Error: ' + error);
      });
- });
+});
 
  app.post('/users/:Username/watchTitles/:MovieID', async (req, res) => {
     await Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -143,7 +167,7 @@ app.post('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
      console.error(error);
      res.status(500).send('Error: ' + error);
      });
- });
+});
 
 //Allow Users to Remove Movies from a List
 app.delete('/users/:Username/favoriteTitles/:MovieID', async (req, res) => {
@@ -158,7 +182,7 @@ app.delete('/users/:Username/favoriteTitles/:MovieID', async (req, res) => {
      console.error(error);
      res.status(500).send('Error: ' + error);
      });
- });
+});
  
 app.delete('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
      await Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -172,7 +196,7 @@ app.delete('/users/:Username/viewedTitles/:MovieID', async (req, res) => {
       console.error(error);
       res.status(500).send('Error: ' + error);
       });
-  });
+});
  
 app.delete('/users/:Username/watchTitles/:MovieID', async (req, res) => {
      await Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -186,13 +210,7 @@ app.delete('/users/:Username/watchTitles/:MovieID', async (req, res) => {
       console.error(error);
       res.status(500).send('Error: ' + error);
       });
-  });
-
-//GET Requests
-
-//Gets the documentation file
-app.get('/documentation.html', (req, res) => {
-    res.sendFile('public/documentation.html', { root: __dirname}); });
+});
 
 //Gets the list of all movies    
 app.get('/movies', async (req, res) => {
@@ -293,6 +311,6 @@ app.use((err, req, res) => {
     console.error(`Stack: ${err.stack}`); });
 
 //Listener for Requests
-app.listen(3000, () => {
-    console.log('Your app is listening on port 3000.');
+app.listen(8080, () => {
+    console.log('Your app is listening on port 8080.');
 });
