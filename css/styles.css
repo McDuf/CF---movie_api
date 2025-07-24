@@ -37,7 +37,7 @@ header {
     height: 20vh;
     width: 100%; }
 
-.logo img {
+header img {
     border-radius: 50%;
     aspect-ratio: 1/1;
     display: inline-block;
@@ -46,10 +46,14 @@ header {
     align-items: left center;
     height: 105%; }
 
-h1 {
+header h1 {
+    display: inline-block;
+    align-items: center;
+    height: 105%;
     font-family: papyrus, fantasy; 
     color: var(--white);
-    margin-top: 1vh; }    
+    margin: 1vh 25vw 1vh 1vw;
+    padding: 0px 10px 5px 20px; }    
 
 mark {
     font-size: +2;
