@@ -24,11 +24,11 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const path = require('path');
-app.use('/', express.static(path.join('C:\Users\"Hannah Irey"\Desktop\CareerFoundry\FullStackImmersion\Achievement_2-ServerSideProgramming_NodeJS\movie_api\public','public')));
+app.use('/', express.static(path.join('http://127.0.0.1:3000/index.html')));
 app.use('/movies', express.static('movies'));
 app.use('/users', express.static('users'));
 
-const Models = require('../js/models.js');
+const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -44,7 +44,7 @@ let timeStamp = ('/log.txt', (req, res, next) => {
 //Default route (homepage)
 
 app.get('/', (req, res) => {
-    res.sendFile('/index.html');
+    res.sendFile('/index');
 });
 
 app.get('/documentation', (req, res) => {                  
