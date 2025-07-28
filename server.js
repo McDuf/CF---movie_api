@@ -5,7 +5,7 @@ const http = require('http'),
 //Server Creation  
 http.createServer((request, response) => {
 let addr = request.url,
-  q = new URL(addr, 'http://127.0.0.1:3001' + request.headers.host),
+  q = new URL(addr, 'http://127.0.0.1:3000' + request.headers.host),
   filePath = '';
 
 fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', (err) => {

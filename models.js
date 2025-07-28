@@ -3,17 +3,13 @@ const mongoose = require('mongoose');
 let movieSchema = mongoose.Schema({
     Title: {type: String, required: true},
     Story: {type: String, required: true},
-    Genre: [
-        Genre: String,
-        Description: string
-    ],
-    Directors: {
-        Director: String,
-        Bio: String
-    },
+    Genre: {Genre: String,
+        Description: String},
+    Directors: {Director: String,
+        Bio: String},
     Cast: [String],
-    ImgURL: String,
-    Featured: Boolean,
+        ImgURL: String,
+        Featured: Boolean,
     GenreID: [{ type: mongoose.Schema.Types.ObjectID, ref: 'Genre'}]
 });
 

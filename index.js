@@ -6,7 +6,7 @@ const express = require('express'),
 const app = express();
 // create a write stream (in append mode)
 // a ‘log.txt’ file is created in root directory
-const accessLogStream = fs.createWriteStream(path.join('C:\Users\"Hannah Irey"\Desktop\CareerFoundry\FullStackImmersion\Achievement_2-ServerSideProgramming_NodeJS\movie_api','./log.txt'),{flags: 'a'});
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'./log.txt'),{flags: 'a'});
 
 // setup the logger
 app.use(morgan('combined', {stream: accessLogStream}));
@@ -24,11 +24,11 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const path = require('path');
-app.use('/', express.static(path.join('http://127.0.0.1:3000/index.html')));
+app.use('/', express.static(path.join('C:/Users/"Hannah Irey"/Desktop/CareerFoundry/FullStackImmersion/Achievement_2-ServerSideProgramming_NodeJS/movie_api/public','public')));
 app.use('/movies', express.static('movies'));
 app.use('/users', express.static('users'));
 
-const Models = require('./models.js');
+const Models = require('./models');
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -44,7 +44,7 @@ let timeStamp = ('/log.txt', (req, res, next) => {
 //Default route (homepage)
 
 app.get('/', (req, res) => {
-    res.sendFile('/index');
+    res.sendFile('./index.html');
 });
 
 app.get('/documentation', (req, res) => {                  
@@ -52,11 +52,11 @@ app.get('/documentation', (req, res) => {
 });
 
 app.get('/movies', (req, res) => {
-  res.json(Movies);
+  Movies.find().then(movies => res.json(Movies));
 });
 
 app.get('/users', (req, res) => {
-  res.json(Users);
+  Users.find().then(users => res.json(users));
 });
 
 //User Options
