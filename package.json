@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,17 @@
   "type": "commonjs",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "eslint": "^9.32.0",
     "express": "^5.1.0",
+    "lodash": "^4.17.21",
     "morgan": "^1.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McDuf/CF---movie_api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/McDuf/CF---movie_api/issues"
+  },
+  "homepage": "https://github.com/McDuf/CF---movie_api#readme"
 }
